@@ -1,26 +1,64 @@
 import { useState } from "react";
 
-const ItemCount = ({ stock, onAdd }) => {
-  const [count, setCount] = useState(1);
+const ItemCount = ({ stock = 0, initial = 1, onAdd }) => {
+  const [count, setCount] = useState(initial);
+  const [added, setAdded] = useState(false);
 
-  const handleAdd = () => {
-    if (count < stock) setCount(count + 1);
+  const handleAddToCart = () => {
+    onAdd(count);
+    setAdded(true);
   };
 
-  const handleSubtract = () => {
-    if (count > 1) setCount(count - 1);
+  const handleIncrease = () => {
+    if (count < stock) {
+      setCount(count + 1);
+    }
   };
+
+  const handleDecrease = () => {
+    if (count > 1) {
+      setCount(count - 1);
+    }
+  };
+
+  const isOutOfStock = stock === 0;
 
   return (
-    <div>
-      <div className="btn-group my-3">
-        <button className="btn btn-secondary" onClick={handleSubtract}>-</button>
-        <span className="btn btn-light">{count}</span>
-        <button className="btn btn-secondary" onClick={handleAdd}>+</button>
-      </div>
-      <button className="btn btn-success" onClick={() => onAdd(count)}>
-        Agregar al carrito
-      </button>
+    <div className="my-4 text-center">
+      {!added ? (
+        <>
+          <div className="btn-group mb-3">
+            <button
+              className="btn btn-outline-secondary"
+              onClick={handleDecrease}
+              disabled={isOutOfStock}
+            >
+              -
+            </button>
+            <span className="btn btn-light">{count}</span>
+            <button
+              className="btn btn-outline-secondary"
+              onClick={handleIncrease}
+              disabled={isOutOfStock}
+            >
+              +
+            </button>
+          </div>
+          <div>
+            <button
+              className="btn btn-success"
+              onClick={handleAddToCart}
+              disabled={isOutOfStock}
+            >
+              {isOutOfStock ? "Sin stock" : "Agregar al carrito"}
+            </button>
+          </div>
+        </>
+      ) : (
+        <div className="alert alert-success mt-3" role="alert">
+          ✔ Producto agregado al carrito
+        </div>
+      )}
     </div>
   );
 };
