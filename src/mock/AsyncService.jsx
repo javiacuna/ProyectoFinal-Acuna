@@ -1,17 +1,10 @@
 const products = [
   {
-    "id": '1',
+   // "id": '1',
     "brand": "Samsung",
     "name": "Samsung Galaxy S23 Ultra",
-    "peso": 234,
-    "medida": "Grs",
-    "unidades": "1 Unidad",
     "unit_price": 1399.99,
-    "precioBulto": 1399.99,
     "stock": 15,
-    "oferta": true,
-    "nuevo": true,
-    "categoria": "Celulares",
     "img": "https://http2.mlstatic.com/D_NQ_NP_992349-MLA73149152709_112023-O.webp"
   },
   {

@@ -1,23 +1,48 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getProducts, getProductsByBrand } from "../mock/AsyncService";
 import ItemList from "./ItemList";
+import { db } from "../service/firebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
-const ItemListContainer = ({ greeting }) => {
-  const [items, setItems] = useState([]);
-  const { brandId } = useParams();
+function ItemListContainer() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { categoryId } = useParams();
 
   useEffect(() => {
-    const fetch = brandId ? getProductsByBrand : getProducts;
-    fetch(brandId).then(setItems);
-  }, [brandId]);
+    setLoading(true);
+
+    const productsRef = collection(db, "products");
+
+    const q = categoryId
+      ? query(productsRef, where("category", "==", categoryId))
+      : productsRef;
+
+    getDocs(q)
+      .then((res) => {
+        const docs = res.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setProducts(docs);
+      })
+      .catch((error) => console.error("Error al obtener productos:", error))
+      .finally(() => setLoading(false));
+  }, [categoryId]);
+
+  if (loading) {
+    return (
+      <div className="text-center p-10 text-xl text-gray-700">
+        ⏳ Cargando productos...
+      </div>
+    );
+  }
 
   return (
-    <div className="container mt-5">
-      <h2>{greeting}</h2>
-      <ItemList items={items} />
-    </div>
+    <section className="p-6 max-w-5xl mx-auto">
+      <ItemList items={products} />
+    </section>
   );
-};
+}
 
 export default ItemListContainer;

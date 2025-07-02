@@ -4,6 +4,7 @@ import ItemListContainer from "../components/ItemListContainer";
 import ItemDetailContainer from "../components/ItemDetailContainer";
 import Cart from "../components/Cart";
 import Error from "../components/Error";
+import Checkout from "../components/Checkout";
 
 const RouterApp = () => {
   return (
@@ -14,6 +15,7 @@ const RouterApp = () => {
         <Route path="/brand/:brandId" element={<ItemListContainer greeting="Filtro aplicado" />} />
         <Route path="/item/:itemId" element={<ItemDetailContainer />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </BrowserRouter>
