@@ -7,15 +7,15 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 function ItemListContainer() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { categoryId } = useParams();
+  const { brandId } = useParams();
 
   useEffect(() => {
     setLoading(true);
 
     const productsRef = collection(db, "products");
 
-    const q = categoryId
-      ? query(productsRef, where("category", "==", categoryId))
+    const q = brandId
+      ? query(productsRef, where("brand", "==", brandId))
       : productsRef;
 
     getDocs(q)
@@ -28,7 +28,7 @@ function ItemListContainer() {
       })
       .catch((error) => console.error("Error al obtener productos:", error))
       .finally(() => setLoading(false));
-  }, [categoryId]);
+  }, [brandId]);
 
   if (loading) {
     return (
